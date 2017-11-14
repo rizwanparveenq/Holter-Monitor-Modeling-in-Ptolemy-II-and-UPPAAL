@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE nta PUBLIC '-//Uppaal Team//DTD Flat System 1.1//EN' 'http://www.it.uu.se/research/group/darts/uppaal/flat-1_2.dtd'>
+<nta>
+	<declaration>// Place global declarations here.
+chan buffer1_read,buffer2_read,buffer2_outputs,buffer1_outputs;
+bool readings_flag, writing_flag;
+const int FULL = 12;
+int buff1, buff2;
+int x=0;
+clock t;
+void read() {
+for(x=0; x&lt;10; x++){
+    readings_flag = true;
+}
+//writing_flag = true;
+}
+void write_SD() {
+for(x=10; x&gt;0; x--){
+    readings_flag = false;
+}
+//writing_flag = true;
+}
+
+void check_buff1(){
+if(buff1==FULL){
+write_SD();
+}
+read();
+}
+
+void check_buff2(){
+if(buff2==FULL){
+write_SD();
+}
+read();
+}
+</declaration>
+	<template>
+		<name x="5" y="5">Template</name>
+		<declaration>// Place local declarations here.</declaration>
+		<location id="id0" x="136" y="-85">
+			<name x="126" y="-119">SD_writing</name>
+		</location>
+		<location id="id1" x="-83" y="-85">
+			<name x="-153" y="-119">Ard_buffer_Reading</name>
+		</location>
+		<location id="id2" x="-212" y="-85">
+			<name x="-222" y="-119">ECG</name>
+		</location>
+		<init ref="id2"/>
+		<transition>
+			<source ref="id1"/>
+			<target ref="id0"/>
+			<label kind="synchronisation" x="0" y="-161">buffer2_outputs?</label>
+			<nail x="8" y="-144"/>
+		</transition>
+		<transition>
+			<source ref="id1"/>
+			<target ref="id1"/>
+			<label kind="synchronisation" x="-110" y="-8">buffer2_read?</label>
+			<nail x="-40" y="-8"/>
+			<nail x="-108" y="-8"/>
+		</transition>
+		<transition>
+			<source ref="id1"/>
+			<target ref="id1"/>
+			<label kind="synchronisation" x="-127" y="-187">buffer1_read?</label>
+			<label kind="assignment" x="-110" y="-161">read()</label>
+			<nail x="-134" y="-161"/>
+			<nail x="-32" y="-161"/>
+		</transition>
+		<transition>
+			<source ref="id0"/>
+			<target ref="id1"/>
+			<label kind="assignment" x="18" y="-55">t=0,
+x=0</label>
+			<nail x="0" y="-25"/>
+		</transition>
+		<transition>
+			<source ref="id1"/>
+			<target ref="id0"/>
+			<label kind="synchronisation" x="-17" y="-102">buffer1_outputs?</label>
+			<nail x="-51" y="-85"/>
+		</transition>
+		<transition>
+			<source ref="id2"/>
+			<target ref="id1"/>
+			<label kind="assignment" x="-186" y="-85">check_buff1(),
+check_buff2()</label>
+		</transition>
+	</template>
+	<template>
+		<name>Template1</name>
+		<location id="id3" x="-382" y="-42">
+			<name x="-424" y="-85">buffer2</name>
+		</location>
+		<location id="id4" x="-102" y="-42">
+			<name x="-112" y="-76">buffer1</name>
+		</location>
+		<location id="id5" x="-246" y="-42">
+			<name x="-256" y="-76">idle</name>
+		</location>
+		<init ref="id5"/>
+		<transition>
+			<source ref="id3"/>
+			<target ref="id5"/>
+			<label kind="synchronisation" x="-374" y="8">buffer2_outputs!</label>
+			<nail x="-314" y="8"/>
+		</transition>
+		<transition>
+			<source ref="id5"/>
+			<target ref="id3"/>
+			<label kind="synchronisation" x="-374" y="-127">buffer2_read!</label>
+			<nail x="-316" y="-106"/>
+		</transition>
+		<transition>
+			<source ref="id4"/>
+			<target ref="id5"/>
+			<label kind="synchronisation" x="-221" y="17">buffer1_outputs!</label>
+			<nail x="-171" y="17"/>
+		</transition>
+		<transition>
+			<source ref="id5"/>
+			<target ref="id4"/>
+			<label kind="synchronisation" x="-212" y="-119">buffer1_read!</label>
+			<nail x="-178" y="-102"/>
+		</transition>
+	</template>
+	<system>// Place template instantiations here.
+
+Process0 = Template();
+Process1 = Template1();
+// List one or more processes to be composed into a system.
+system Process0, Process1;
+    </system>
+	<queries>
+	</queries>
+</nta>
