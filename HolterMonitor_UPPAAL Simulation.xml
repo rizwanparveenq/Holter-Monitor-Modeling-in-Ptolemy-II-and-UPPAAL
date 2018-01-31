@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE nta PUBLIC '-//Uppaal Team//DTD Flat System 1.1//EN' 'http://www.it.uu.se/research/group/darts/uppaal/flat-1_2.dtd'>
+<nta>
+	<declaration>// Place global declarations here.
+chan buffer1,buffer2;</declaration>
+	<template>
+		<name>Temp1</name>
+		<location id="id0" x="-17" y="-25">
+			<name x="-27" y="-59">b2_write</name>
+		</location>
+		<location id="id1" x="-255" y="-34">
+			<name x="-265" y="-68">b1_write</name>
+		</location>
+		<init ref="id1"/>
+		<transition>
+			<source ref="id0"/>
+			<target ref="id1"/>
+			<label kind="synchronisation" x="-170" y="17">buffer2?</label>
+			<nail x="-144" y="17"/>
+		</transition>
+		<transition>
+			<source ref="id1"/>
+			<target ref="id0"/>
+			<label kind="synchronisation" x="-161" y="-102">buffer1?</label>
+			<nail x="-136" y="-85"/>
+		</transition>
+	</template>
+	<template>
+		<name x="5" y="5">Temp0</name>
+		<declaration>// Place local declarations here.</declaration>
+		<location id="id2" x="-153" y="-76">
+			<name x="-127" y="-85">Buffer_write</name>
+		</location>
+		<location id="id3" x="-297" y="-76">
+			<name x="-331" y="-110">ECG_measure</name>
+		</location>
+		<init ref="id3"/>
+		<transition>
+			<source ref="id2"/>
+			<target ref="id2"/>
+			<label kind="synchronisation" x="-170" y="-8">buffer2!</label>
+			<nail x="-102" y="-8"/>
+			<nail x="-195" y="-8"/>
+		</transition>
+		<transition>
+			<source ref="id2"/>
+			<target ref="id2"/>
+			<label kind="synchronisation" x="-178" y="-161">buffer1!</label>
+			<nail x="-204" y="-144"/>
+			<nail x="-102" y="-144"/>
+		</transition>
+		<transition>
+			<source ref="id3"/>
+			<target ref="id2"/>
+		</transition>
+	</template>
+	<system>// Place template instantiations here.
+Process0 = Temp0();
+Process1 = Temp1();
+
+// List one or more processes to be composed into a system.
+system Process0, Process1;
+    </system>
+	<queries>
+	</queries>
+</nta>
